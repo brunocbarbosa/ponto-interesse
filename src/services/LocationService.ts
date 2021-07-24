@@ -6,12 +6,33 @@ interface ILocationRequest{
   coord_y: number;
 }
 
+interface IDmAxRequest{
+  dMax: number;
+  coordX: number;
+  coordY: number;
+}
+
 class LocationService{
   async getAll(){
     const locations = await knex('locations')
       .select('*');
 
     return locations;
+  }
+
+  async getInterestPoint({dMax, coordX, coordY}: IDmAxRequest){
+    let interestPoints: string[] = []
+
+    const locations = await knex<ILocationRequest>('locations')
+      .select('name', 'coord_x', 'coord_y')
+
+    locations.forEach(loc => {
+      let location = Math.sqrt(Math.pow(loc.coord_x - coordX, 2) + Math.pow(loc.coord_y - coordY, 2))
+
+      if(location <= dMax) interestPoints.push(loc.name)
+    })
+
+    return interestPoints
   }
 
   async create({ name, coord_x, coord_y }: ILocationRequest){
@@ -25,8 +46,6 @@ class LocationService{
     })
 
     await trx.commit();
-
-    console.log(location)
 
     return location;
   }

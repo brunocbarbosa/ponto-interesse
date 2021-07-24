@@ -11,12 +11,27 @@ class LocationController{
       locations
     })
   }
-  async create(req: Request, res: Response){
-    const { name, coord_x, coord_y } = req.body;
+
+  async getInterestPoint(req: Request, res: Response){
+    const { dMax, coordX, coordY } = req.body;
 
     const locationService = new LocationService();
 
-    await locationService.create({
+    const interestPointList = await locationService.getInterestPoint({dMax, coordX, coordY})
+
+    return res.json({
+      interestPointList
+    })
+  }
+
+  async create(req: Request, res: Response){
+    const { name, coord_x, coord_y } = req.body;
+
+    if(coord_x < 0 || coord_y < 0 ) throw new Error('Not permited negative number')
+
+    const locationService = new LocationService();
+
+    const location = await locationService.create({
       name,
       coord_x,
       coord_y
