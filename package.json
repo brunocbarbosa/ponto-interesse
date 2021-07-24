@@ -7,9 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
-    "migrate:make": "knex migrate:make",
     "migrate:run": "knex --knexfile knexfile.ts migrate:latest",
-    "seed:create": "knex seed:make",
     "seed:run": "knex seed:run"
   },
   "devDependencies": {
