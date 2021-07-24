@@ -15,9 +15,16 @@ class LocationController{
   async getInterestPoint(req: Request, res: Response){
     const { dMax, coordX, coordY } = req.body;
 
+    if(dMax <0 || coordX < 0 || coordY < 0 ) throw new Error('Not permited negative number')
+
     const locationService = new LocationService();
 
-    const interestPointList = await locationService.getInterestPoint({dMax, coordX, coordY})
+    const interestPointList = await locationService.getInterestPoint(
+      {
+        dMax, 
+        coordX, 
+        coordY
+      })
 
     return res.json({
       interestPointList
